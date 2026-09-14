@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Sinh Viên</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css">
+    <style>
+        body {
+            margin: 0;
+            background: #f1f3f5;
+            font-family: "Segoe UI", Arial, sans-serif;
+            color: #1f2937;
+        }
+
+        .app-shell {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 240px;
+            background: linear-gradient(180deg, #1f2d3d 0%, #1d2430 100%);
+            color: #f8fafc;
+            padding: 18px 16px;
+            box-shadow: 2px 0 18px rgba(0, 0, 0, 0.08);
+        }
+
+        .brand-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 8px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            margin-bottom: 18px;
+        }
+
+        .brand-logo {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #4e9ae6;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .brand-text {
+            font-size: 1.05rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+
+        .side-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .nav-item-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: 12px;
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            transition: 0.2s ease;
+        }
+
+        .nav-item-link.active,
+        .nav-item-link:hover {
+            background: rgba(255,255,255,0.08);
+            color: #ffffff;
+        }
+
+        .nav-item-link i {
+            font-size: 1.05rem;
+        }
+
+        .main {
+            flex: 1;
+            padding: 18px 24px 24px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 8px 0 18px;
+            color: #4b5563;
+            font-size: 0.95rem;
+        }
+
+        .topbar .crumb {
+            color: #6b7280;
+        }
+
+        .page-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .page-title h1 {
+            margin: 0;
+            font-size: 2.1rem;
+            font-weight: 700;
+            color: #1f2937;
+}
+
+        .btn-primary-custom {
+            border: none;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            border-radius: 10px;
+            padding: 11px 18px;
+            font-weight: 600;
+            box-shadow: 0 8px 18px rgba(59,130,246,0.22);
+        }
+
+        .content-panel {
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 18px;
+            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 16px;
+        }
+
+        .search-box {
+            width: 100%;
+            max-width: 100%;
+            display: flex;
+            align-items: center;
+            background: #f5f7fa;
+            border: 1px solid #dfe4ea;
+            border-radius: 10px;
+            padding: 6px 10px;
+        }
+
+        .search-form {
+            max-width: 100%;
+        }
+
+        .col-stt {
+            width: 60px;
+        }
+
+        .col-code {
+            width: 130px;
+        }
+
+        .col-phone {
+            width: 150px;
+        }
+
+        .col-class {
+            width: 120px;
+        }
+
+        .col-action {
+            width: 140px;
+        }
+
+        .search-box i {
+            color: #6b7280;
+            font-size: 1.1rem;
+            margin-right: 8px;
+        }
+
+        .search-box input {
+            flex: 1;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 1rem;
+            padding: 8px 0;
+        }
+
+        .search-box button {
+            border: none;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            border-radius: 8px;
+            padding: 10px 18px;
+            font-weight: 600;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0;
+        }
+
+        thead th {
+            background: #f3f4f6;
+            color: #374151;
+            font-size: 0.96rem;
+            font-weight: 700;
+            padding: 15px 14px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        tbody td {
+            padding: 14px;
+            border-bottom: 1px solid #edf0f3;
+            color: #374151;
+            vertical-align: middle;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .btn-action {
+            border: none;
+            border-radius: 8px;
+            padding: 7px 12px;
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.9rem;
+transition: transform 0.15s ease;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-edit {
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+        }
+
+        .btn-delete {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        .sticky-row {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        @media (max-width: 991px) {
+            .app-shell {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .main {
+                padding: 16px;
+            }
+
+            .page-title {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="brand-box">
+                <div class="brand-logo">U</div>
+                <div class="brand-text">University Training</div>
+            </div>
+
+            <nav class="side-menu">
+                <a href="/students" class="nav-item-link active">
+                    <i class="bi bi-people-fill"></i>
+                    <span>Sinh viên</span>
+                </a>
+                <a href="#" class="nav-item-link">
+                    <i class="bi bi-card-list"></i>
+                    <span>Học phần</span>
+                </a>
+                <a href="#" class="nav-item-link">
+                    <i class="bi bi-mortarboard-fill"></i>
+                    <span>Phòng học</span>
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main">
+            <div class="topbar">
+                <span class="crumb">Home</span>
+                <span class="mx-2">/</span>
+                <span>Sinh viên</span>
+            </div>
+
+            <div class="page-title">
+                <h1>Quản lý sinh viên</h1>
+                <button type="button" class="btn-primary-custom" onclick="document.getElementById('studentForm').scrollIntoView({behavior:'smooth'});">
+                    <i class="bi bi-plus-circle me-1"></i> Thêm sinh viên
+                </button>
+            </div>
+
+            <div class="content-panel">
+                <div class="toolbar">
+                    <form th:action="@{/students}" method="get" class="search-box search-form">
+                        <i class="bi bi-search"></i>
+                        <input type="text" name="keyword" th:value="${keyword}" placeholder="Tìm mã SV, họ tên, email...">
+                        <button type="submit">Tìm kiếm</button>
+                    </form>
+                </div>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr class="sticky-row">
+                                <th class="col-stt">STT</th>
+<th class="col-code">Mã sinh viên</th>
+                                <th>Họ và tên</th>
+                                <th>Email</th>
+                                <th class="col-phone">Số điện thoại</th>
+                                <th class="col-class">Lớp</th>
+                                <th class="col-action">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="student, stat : ${students}">
+                                <td th:text="${stat.count}"></td>
+                                <td th:text="${student.studentCode}"></td>
+                                <td th:text="${student.fullName}"></td>
+                                <td th:text="${student.email}"></td>
+                                <td th:text="${student.phone}"></td>
+                                <td th:text="${student.className}"></td>
+                                <td>
+                                    <div class="table-actions">
+                                        <button type="button" class="btn-action btn-edit">
+                                            <i class="bi bi-pencil-square me-1"></i>Sửa
+                                        </button>
+                                        <a th:href="@{/students/delete/{id}(id=${student.id})}"
+                                           class="btn-action btn-delete text-decoration-none"
+                                           onclick="return confirm('Xác nhận xóa sinh viên này?');">
+                                            <i class="bi bi-trash me-1"></i>Xóa
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="studentForm" class="content-panel mt-4">
+                <h3 class="mb-3">Thêm sinh viên mới</h3>
+                <form th:action="@{/students/add}" th:object="${newStudent}" method="post">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label class="form-label">Mã sinh viên</label>
+                            <input type="text" class="form-control" th:field="*{studentCode}" placeholder="SV001">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Họ và tên</label>
+                            <input type="text" class="form-control" th:field="*{fullName}" required placeholder="Nhập họ và tên" title="Nhập họ và tên">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Email</label>
+<input type="email" class="form-control" th:field="*{email}" required placeholder="Nhập email" title="Nhập email">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Số điện thoại</label>
+                            <input type="text" class="form-control" th:field="*{phone}" placeholder="Nhập số điện thoại" title="Nhập số điện thoại">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Lớp</label>
+                            <input type="text" class="form-control" th:field="*{className}" placeholder="Nhập tên lớp" title="Nhập tên lớp">
+                        </div>
+                        <div class="col-12 mt-2">
+                            <button type="submit" class="btn btn-primary">Thêm mới</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
