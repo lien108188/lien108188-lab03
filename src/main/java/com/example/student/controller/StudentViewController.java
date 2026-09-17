@@ -1,5 +1,6 @@
 package com.example.student.controller;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,36 @@ public class StudentViewController {
     @PostMapping("/add")
     public String addStudent(@ModelAttribute("newStudent") Student student) {
         studentRepository.save(student);
+        return "redirect:/students";
+    }
+
+    // Mở form sửa sinh viên
+    @GetMapping("/edit/{id}")
+    public String editStudent(@PathVariable("id") UUID id, Model model) {
+        Optional<Student> student = studentRepository.findById(id);
+        if (student.isEmpty()) {
+            return "redirect:/students";
+        }
+        model.addAttribute("student", student.get());
+        return "student-edit";
+    }
+
+    // Cập nhật sinh viên
+    @PostMapping("/update/{id}")
+    public String updateStudent(@PathVariable("id") UUID id,
+            @ModelAttribute("student") Student student) {
+        Student existingStudent = studentRepository.findById(id).orElse(null);
+        if (existingStudent == null) {
+            return "redirect:/students";
+        }
+
+        existingStudent.setStudentCode(student.getStudentCode());
+        existingStudent.setFullName(student.getFullName());
+        existingStudent.setEmail(student.getEmail());
+        existingStudent.setPhone(student.getPhone());
+        existingStudent.setClassName(student.getClassName());
+
+        studentRepository.save(existingStudent);
         return "redirect:/students";
     }
 

@@ -112,7 +112,7 @@
             font-size: 2.1rem;
             font-weight: 700;
             color: #1f2937;
-}
+        }
 
         .btn-primary-custom {
             border: none;
@@ -242,7 +242,7 @@
             color: #fff;
             font-weight: 600;
             font-size: 0.9rem;
-transition: transform 0.15s ease;
+            transition: transform 0.15s ease;
         }
 
         .btn-action:hover {
@@ -336,7 +336,7 @@ transition: transform 0.15s ease;
                         <thead>
                             <tr class="sticky-row">
                                 <th class="col-stt">STT</th>
-<th class="col-code">Mã sinh viên</th>
+                                <th class="col-code">Mã sinh viên</th>
                                 <th>Họ và tên</th>
                                 <th>Email</th>
                                 <th class="col-phone">Số điện thoại</th>
@@ -354,9 +354,10 @@ transition: transform 0.15s ease;
                                 <td th:text="${student.className}"></td>
                                 <td>
                                     <div class="table-actions">
-                                        <button type="button" class="btn-action btn-edit">
+                                        <a th:href="@{/students/edit/{id}(id=${student.id})}"
+                                           class="btn-action btn-edit text-decoration-none">
                                             <i class="bi bi-pencil-square me-1"></i>Sửa
-                                        </button>
+                                        </a>
                                         <a th:href="@{/students/delete/{id}(id=${student.id})}"
                                            class="btn-action btn-delete text-decoration-none"
                                            onclick="return confirm('Xác nhận xóa sinh viên này?');">
@@ -384,7 +385,7 @@ transition: transform 0.15s ease;
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">Email</label>
-<input type="email" class="form-control" th:field="*{email}" required placeholder="Nhập email" title="Nhập email">
+                            <input type="email" class="form-control" th:field="*{email}" required placeholder="Nhập email" title="Nhập email">
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">Số điện thoại</label>
